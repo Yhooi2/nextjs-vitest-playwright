@@ -1,4 +1,6 @@
-function makeNewTodo(description: string) {
+import { Todo } from "./schemas/todo.contract"
+
+function makeNewTodo(description: string): Todo {
     return (
        {
         id: crypto.randomUUID(),

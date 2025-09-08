@@ -1,3 +1,3 @@
-export function sanitazeStr(str: String) : String {
-    return !str || !str.toString ? "" : str.trim().normalize();
+export function sanitizeStr(str: string) : string {
+    return !str || typeof str !== "string" ? "" : str.trim().normalize();
 }
