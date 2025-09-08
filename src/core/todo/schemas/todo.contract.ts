@@ -6,7 +6,7 @@ export type Todo = {
 
 export type InvalidTodo = {
     seccess: false;
-    error: string[];
+    errors: string[];
 }
 export type ValidTodo = {
     seccess: true;
@@ -17,5 +17,5 @@ export type MakeValidateTodo = InvalidTodo | ValidTodo;
 
 export type ValidateTodoDescription = {
     seccess: boolean;
-    error: string[];
+    errors: string[];
 }

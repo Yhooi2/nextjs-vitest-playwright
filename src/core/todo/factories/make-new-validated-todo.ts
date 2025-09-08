@@ -15,6 +15,6 @@ export function makeNewValidatedTodo(description: string): MakeValidateTodo {
     }
     return {
         seccess: false,
-        error: result.error
+        errors: result.errors
     }
 }
