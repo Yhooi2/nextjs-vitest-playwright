@@ -1,5 +1,4 @@
 import { sanitizeStr } from "@/utils/sanitize-str"
-import makeNewTodo from "../make-new-todo"
 import { ValidateTodoDescription } from "./todo.contract";
 
 

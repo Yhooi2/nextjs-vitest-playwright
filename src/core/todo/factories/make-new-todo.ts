@@ -1,6 +1,6 @@
-import { Todo } from "./schemas/todo.contract"
+import { Todo } from "../schemas/todo.contract"
 
-function makeNewTodo(description: string): Todo {
+export function makeNewTodo(description: string): Todo {
     return (
        {
         id: crypto.randomUUID(),
@@ -11,4 +11,3 @@ function makeNewTodo(description: string): Todo {
     )
 }
 
-export default makeNewTodo

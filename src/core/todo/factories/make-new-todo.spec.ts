@@ -1,4 +1,4 @@
-import makeNewTodo from "./make-new-todo";
+import {makeNewTodo} from "./make-new-todo";
 
 describe('makeNewTodo (unit)', () => {
     // AAA - Arrange, Act, Assert 

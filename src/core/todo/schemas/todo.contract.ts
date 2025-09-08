@@ -10,7 +10,7 @@ export type InvalidTodo = {
 }
 export type ValidTodo = {
     seccess: true;
-    date: Todo;
+    data: Todo;
 }
 export type MakeValidateTodo = InvalidTodo | ValidTodo;
 
