@@ -1,6 +1,6 @@
 import * as sanitizeStrSpy from '@/utils/sanitize-str';
-import { makeNewValidatedTodo } from './make-new-validated-todo';
 import * as validateTodoDescriptionSpy from '../schemas/validate-todo-description';
+import { makeNewValidatedTodo } from './make-new-validated-todo';
 
 describe('makeNewValidatedTodo (unit)', () => {
   const description = 'test';

@@ -1,4 +1,3 @@
-import { sanitizeStr } from '@/utils/sanitize-str';
 import { ValidateTodoDescription } from './todo.contract';
 
 export function validateTodoDescription(discription: string): ValidateTodoDescription {

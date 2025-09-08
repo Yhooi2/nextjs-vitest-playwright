@@ -1,9 +1,9 @@
 /// <reference types="vitest" />
 // Обеспечивает распознавание типов Vitest TypeScript
 
-import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { defineConfig } from 'vitest/config';
 
 // Сначала загрузите переменные окружения
 // Я использую командную строку для этого (но оставил её здесь, если вам удобно)
