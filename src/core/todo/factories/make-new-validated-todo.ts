@@ -1,20 +1,20 @@
-import { sanitizeStr } from "@/utils/sanitize-str";
-import { validateTodoDescription } from "../schemas/validate-todo-description";
-import {makeNewTodo} from "./make-new-todo";
-import { MakeValidateTodo } from "../schemas/todo.contract";
+import { sanitizeStr } from '@/utils/sanitize-str';
+import { validateTodoDescription } from '../schemas/validate-todo-description';
+import { makeNewTodo } from './make-new-todo';
+import { MakeValidateTodo } from '../schemas/todo.contract';
 
 export function makeNewValidatedTodo(description: string): MakeValidateTodo {
-    const clearDescription = sanitizeStr(description);
-    const result = validateTodoDescription(clearDescription);
+  const clearDescription = sanitizeStr(description);
+  const result = validateTodoDescription(clearDescription);
 
-    if (result.seccess) {
-        return {
-            seccess: true,
-            data: makeNewTodo(clearDescription)
-        };
-    }
+  if (result.seccess) {
     return {
-        seccess: false,
-        errors: result.errors
-    }
+      seccess: true,
+      data: makeNewTodo(clearDescription),
+    };
+  }
+  return {
+    seccess: false,
+    errors: result.errors,
+  };
 }

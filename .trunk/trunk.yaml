@@ -16,7 +16,9 @@ lint:
     - git-diff-check
     - markdownlint@0.45.0
     - osv-scanner@2.2.2
-    - prettier@3.6.2
+    - prettier@3.6.2:
+        packages:
+          - '@trivago/prettier-plugin-sort-imports@4.3.0'
     - svgo@4.0.0
     - trivy@0.66.0
     - trufflehog@3.90.6

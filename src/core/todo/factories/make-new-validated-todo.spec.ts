@@ -1,8 +1,27 @@
-import { makeNewValidatedTodo } from "./make-new-validated-todo";
+import * as sanitizeStrSpy from '@/utils/sanitize-str';
+import { makeNewValidatedTodo } from './make-new-validated-todo';
+import * as validateTodoDescriptionSpy from '../schemas/validate-todo-description';
 
-describe("makeNewValidatedTodo (unit)", () => {
-    test("return invalid when string less 4 chars", () => {
-        const result = makeNewValidatedTodo("123");
-        expect(result.seccess).toBe(false);
-    })
-})
+describe('makeNewValidatedTodo (unit)', () => {
+  const description = 'test';
+
+  test('check call sanitizeStr using mock', () => {
+    // Arrange
+    const spy = vi.spyOn(sanitizeStrSpy, 'sanitizeStr').mockReturnValue(description);
+
+    // Act
+    makeNewValidatedTodo(description);
+
+    // Assert
+    expect(spy).toHaveBeenCalledExactlyOnceWith(description);
+  });
+
+  test('check call validateTodoDescription using mock', () => {
+    const spy = vi
+      .spyOn(validateTodoDescriptionSpy, 'validateTodoDescription')
+      .mockReturnValue({ seccess: true, errors: [] });
+
+    makeNewValidatedTodo(description);
+    expect(spy).toHaveBeenCalledExactlyOnceWith(description);
+  });
+});
