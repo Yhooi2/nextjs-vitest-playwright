@@ -4,7 +4,7 @@ import * as makeNewTodoMod from './make-new-todo';
 import { makeNewValidatedTodo } from './make-new-validated-todo';
 
 function makeMocks(description = 'test') {
-  const returnValidateTodo = { seccess: true, errors: [] };
+  const validationResult = { success: true, errors: [] };
 
   const todo = {
     id: expect.any(String),
@@ -16,14 +16,14 @@ function makeMocks(description = 'test') {
 
   const validateTodoDescriptionSpy = vi
     .spyOn(validateTodoDescriptionMod, 'validateTodoDescription')
-    .mockReturnValue(returnValidateTodo);
+    .mockReturnValue(validationResult);
 
   const makeNewTodoSpy = vi.spyOn(makeNewTodoMod, 'makeNewTodo').mockReturnValue(todo);
 
   return {
     description,
     sanitizeStrSpy,
-    returnValidateTodo,
+    validationResult,
     validateTodoDescriptionSpy,
     todo,
     makeNewTodoSpy,
@@ -57,12 +57,12 @@ describe('makeNewValidatedTodo (unit)', () => {
 
     const result = makeNewValidatedTodo(description);
     expect(result).toStrictEqual({
-      seccess: true,
+      success: true,
       data: todo,
     });
   });
   test('check return error', () => {
-    const errorReturn = { seccess: false, errors: ['any', 'error'] };
+    const errorReturn = { success: false, errors: ['any', 'error'] };
     const { description, validateTodoDescriptionSpy } = makeMocks();
     validateTodoDescriptionSpy.mockReturnValue(errorReturn);
     const result = makeNewValidatedTodo(description);

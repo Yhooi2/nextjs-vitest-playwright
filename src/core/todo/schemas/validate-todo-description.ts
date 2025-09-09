@@ -9,5 +9,5 @@ export function validateTodoDescription(discription: string): ValidateTodoDescri
     errors.push('string more 255 chars need less');
   }
 
-  return { seccess: errors.length === 0, errors };
+  return { success: errors.length === 0, errors };
 }

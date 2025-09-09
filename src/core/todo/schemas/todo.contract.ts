@@ -5,16 +5,16 @@ export type Todo = {
 };
 
 export type InvalidTodo = {
-  seccess: false;
+  success: false;
   errors: string[];
 };
 export type ValidTodo = {
-  seccess: true;
+  success: true;
   data: Todo;
 };
 export type MakeValidateTodo = InvalidTodo | ValidTodo;
 
 export type ValidateTodoDescription = {
-  seccess: boolean;
+  success: boolean;
   errors: string[];
 };

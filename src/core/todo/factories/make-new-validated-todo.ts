@@ -7,14 +7,14 @@ export function makeNewValidatedTodo(description: string): MakeValidateTodo {
   const clearDescription = sanitizeStr(description);
   const result = validateTodoDescription(clearDescription);
 
-  if (result.seccess) {
+  if (result.success) {
     return {
-      seccess: true,
+      success: true,
       data: makeNewTodo(clearDescription),
     };
   }
   return {
-    seccess: false,
+    success: false,
     errors: result.errors,
   };
 }
