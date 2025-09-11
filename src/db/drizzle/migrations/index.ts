@@ -41,9 +41,3 @@ if (!global.__DB__) {
 
 export const drizzleDb = { db: global.__DB__, todoTable };
 export type DrizzleDb = ReturnType<typeof makeDrizzle>;
-
-// Removed async initialization to prevent potential race conditions
-(async () => {
-  const db = global.__DB__;
-  console.log(await db.query.todo.findMany());
-})();

@@ -10,9 +10,9 @@ export type InvalidTodo = {
 };
 export type ValidTodo = {
   success: true;
-  data: Todo;
+  todo: Todo;
 };
-export type MakeValidateTodo = InvalidTodo | ValidTodo;
+export type TodoPresenter = InvalidTodo | ValidTodo;
 
 export type ValidateTodoDescription = {
   success: boolean;

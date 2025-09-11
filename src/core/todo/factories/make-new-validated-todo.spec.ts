@@ -58,7 +58,7 @@ describe('makeNewValidatedTodo (unit)', () => {
     const result = makeNewValidatedTodo(description);
     expect(result).toStrictEqual({
       success: true,
-      data: todo,
+      todo: todo,
     });
   });
   test('check return error', () => {
