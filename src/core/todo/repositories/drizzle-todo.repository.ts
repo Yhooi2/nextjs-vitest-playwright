@@ -1,4 +1,4 @@
-import { DrizzleDb } from '@/db/drizzle/migrations';
+import { DrizzleDb } from '@/db';
 import { eq } from 'drizzle-orm';
 import { todoTable } from '../schemas/drizzle-todo-table-schema';
 import { Todo, TodoPresenter } from '../schemas/todo.contract';
