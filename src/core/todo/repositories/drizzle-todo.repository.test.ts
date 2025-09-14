@@ -33,8 +33,18 @@ describe('DrizzleTodoRepository CRUD tests (integrations)', async () => {
     test("When creating 2 todos with the same ID or description, an error is returned ans didn't create", async () => {
       const res1 = await repository.create(todo);
       expect(res1).toStrictEqual(successResult);
+      const description = todo.description;
+      todo.description = 'any another';
       const res2 = await repository.create(todo);
       expect(res2).toStrictEqual({ success: false, errors: ['Todo with this ID already exists'] });
+      todo.id = 'any another id';
+      todo.description = description;
+      const res3 = await repository.create(todo);
+      expect(res3).toStrictEqual({
+        success: false,
+        errors: ['Todo with this description already exists'],
+      });
+
       expect(await repository.findAll()).toHaveLength(1);
     });
   });

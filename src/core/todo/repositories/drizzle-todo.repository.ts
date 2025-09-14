@@ -20,13 +20,25 @@ export class DrizzleTodoRepository implements TodoRepository {
       where: (todo, { eq }) => eq(todo.id, id),
     });
   }
+  async findByDescription(description: string): Promise<Todo | undefined> {
+    return this.db.query.todo.findFirst({
+      where: (todo, { eq }) => eq(todo.description, description),
+    });
+  }
 
   async create(todo: Todo): Promise<TodoPresenter> {
-    const foundTodo = await this.findById(todo.id);
-    if (foundTodo) {
+    const foundTodoById = await this.findById(todo.id);
+    if (foundTodoById) {
       return {
         success: false,
         errors: ['Todo with this ID already exists'],
+      };
+    }
+    const foundTodoByDescription = await this.findByDescription(todo.description);
+    if (foundTodoByDescription) {
+      return {
+        success: false,
+        errors: ['Todo with this description already exists'],
       };
     }
 

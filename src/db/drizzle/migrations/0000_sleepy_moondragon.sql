@@ -3,3 +3,5 @@ CREATE TABLE `todo` (
 	`description` text NOT NULL,
 	`created_at` text NOT NULL
 );
+--> statement-breakpoint
+CREATE UNIQUE INDEX `todo_description_unique` ON `todo` (`description`);
