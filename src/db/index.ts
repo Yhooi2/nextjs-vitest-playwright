@@ -3,13 +3,14 @@ import { getFullEnv } from '@/env/configs';
 import Database from 'better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
-import * as fs from 'fs';
-import * as path from 'path';
 
 const makeDrizzle = () => {
   const { databaseFile, drizzleMigrationsFolder, currentEnv } = getFullEnv();
 
-  // Debug logs removed
+  // Debug logs
+  // console.log('[DEBUG] Database file path:', databaseFile);
+  // console.log('[DEBUG] Migrations folder:', drizzleMigrationsFolder);
+  // console.log('[DEBUG] Current environment:', currentEnv);
 
   const sqliteDataBase = new Database(databaseFile);
   const db = drizzle(sqliteDataBase, {
@@ -19,7 +20,8 @@ const makeDrizzle = () => {
   // Apply migrations in development too
   if (['development', 'test', 'e2e'].includes(currentEnv)) {
     console.log('Running database migrations...');
-    const journalPath = path.join(drizzleMigrationsFolder, 'meta/_journal.json');
+    // const journalPath = path.join(drizzleMigrationsFolder, 'meta/_journal.json');
+
     try {
       migrate(db, { migrationsFolder: drizzleMigrationsFolder });
       console.log('Migrations applied successfully');

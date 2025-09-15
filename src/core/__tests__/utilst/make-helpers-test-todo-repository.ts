@@ -23,8 +23,7 @@ export async function makeTodosRepository() {
 }
 
 export const insertTestTodos = async () => {
-  const { insertTodoDb } = await makeTodosRepository();
-  const todos = makeTestTodos();
+  const { todos, insertTodoDb } = await makeTodosRepository();
 
   await insertTodoDb().values(todos);
   return todos;
