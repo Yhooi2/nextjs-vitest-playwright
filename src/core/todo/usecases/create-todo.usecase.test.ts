@@ -1,9 +1,9 @@
-import { makeHelpersTodoRepository } from '@/core/__tests__/utilst/make-helpers-test-todo-repository';
+import { makeTodosRepository } from '@/core/__tests__/utilst/make-helpers-test-todo-repository';
 import { InvalidTodo, ValidTodo } from '../schemas/todo.contract';
 import { CreateTodoUseCase } from './create-todo.usecase';
 
 describe('CreateTodoUseCase(integration)', async () => {
-  const { clearDb } = await makeHelpersTodoRepository();
+  const { clearDb } = await makeTodosRepository();
   beforeEach(clearDb);
   afterAll(clearDb);
   test('should return error for invalid description', async () => {

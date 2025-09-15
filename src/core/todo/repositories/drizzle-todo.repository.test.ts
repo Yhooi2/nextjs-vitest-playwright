@@ -1,8 +1,11 @@
-import { makeHelpersTodoRepository } from '@/core/__tests__/utilst/make-helpers-test-todo-repository';
+import {
+  insertTestTodos,
+  makeTodosRepository,
+} from '@/core/__tests__/utilst/make-helpers-test-todo-repository';
 
 describe('DrizzleTodoRepository CRUD tests (integrations)', async () => {
-  const { repository, clearDb, insertTodos, todo, successResult } =
-    await makeHelpersTodoRepository();
+  const { clearDb, repository, todos } = await makeTodosRepository();
+  const successResult = { success: true, todo: todos[0] };
   beforeEach(async () => {
     await clearDb();
   });
@@ -17,28 +20,30 @@ describe('DrizzleTodoRepository CRUD tests (integrations)', async () => {
     });
 
     test('findAll returns todos in descending order', async () => {
-      const todos = await insertTodos();
-      expect(await repository.findAll()).toStrictEqual(todos);
+      await insertTestTodos();
+      expect(await repository.findAll()).toStrictEqual(
+        todos.toSorted((a, b) => Number(b.createdAt) - Number(a.createdAt))
+      );
     });
   });
   describe('create tests', () => {
     test('When one todo is created, func and findAll returns it', async () => {
-      const result = await repository.create(todo);
+      const result = await repository.create(todos[0]);
       expect(result).toStrictEqual(successResult);
       const finded = await repository.findAll();
       expect(finded).toHaveLength(1);
-      expect(finded).toStrictEqual([todo]);
+      expect(finded).toStrictEqual([todos[0]]);
     });
 
     test("When creating 2 todos with the same ID or description, an error is returned ans didn't create", async () => {
+      const todo = { ...todos[0] };
       const res1 = await repository.create(todo);
       expect(res1).toStrictEqual(successResult);
-      const description = todo.description;
       todo.description = 'any another';
       const res2 = await repository.create(todo);
       expect(res2).toStrictEqual({ success: false, errors: ['Todo with this ID already exists'] });
       todo.id = 'any another id';
-      todo.description = description;
+      todo.description = todos[0].description;
       const res3 = await repository.create(todo);
       expect(res3).toStrictEqual({
         success: false,
@@ -51,8 +56,8 @@ describe('DrizzleTodoRepository CRUD tests (integrations)', async () => {
 
   describe('delete test', async () => {
     test('When the only todo is deleted, return success and findAll returns an empty array', async () => {
-      await repository.create(todo);
-      const res = await repository.delete(todo.id);
+      await repository.create(todos[0]);
+      const res = await repository.delete(todos[0].id);
       expect(res).toStrictEqual(successResult);
       expect(await repository.findAll()).toHaveLength(0);
     });

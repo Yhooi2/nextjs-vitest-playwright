@@ -2,24 +2,30 @@ import { DrizzleTodoRepository } from '@/core/todo/repositories/drizzle-todo.rep
 import { Todo } from '@/core/todo/schemas/todo.contract';
 import { drizzleDb } from '@/db';
 
-export async function makeHelpersTodoRepository() {
+export const makeTestTodos = () => {
+  const newTodo = new Array<Todo>();
+  for (let i = 0; i < 5; ++i) {
+    const si = i.toString();
+    newTodo.push({ id: si, description: 'descreption' + si, createdAt: si });
+  }
+  return newTodo;
+};
+
+export async function makeTodosRepository() {
   const { db, todoTable } = drizzleDb;
   const repository = new DrizzleTodoRepository(db);
+  const todos = makeTestTodos();
 
   const insertTodoDb = () => db.insert(todoTable);
   const clearDb = () => db.delete(todoTable);
 
-  const insertTodos = async () => {
-    const todos = new Array<Todo>();
-    for (let i = 0; i < 5; ++i) {
-      const si = i.toString();
-      todos.push({ id: si, description: 'descreption' + si, createdAt: si });
-    }
-    await insertTodoDb().values(todos);
-    return todos.sort((a, b) => Number(b.createdAt) - Number(a.createdAt));
-  };
-  const todo = { id: '0', description: 'test', createdAt: new Date().toISOString() };
-  const successResult = { success: true, todo };
-
-  return { repository, insertTodoDb, clearDb, insertTodos, todo, successResult };
+  return { repository, insertTodoDb, clearDb, todos };
 }
+
+export const insertTestTodos = async () => {
+  const { insertTodoDb } = await makeTodosRepository();
+  const todos = makeTestTodos();
+
+  await insertTodoDb().values(todos);
+  return todos;
+};
