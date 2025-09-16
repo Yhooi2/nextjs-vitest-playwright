@@ -1,55 +1,27 @@
-import { revalidatePath } from 'next/cache';
-import { InvalidTodo, ValidTodo } from '../schemas/todo.contract';
-import * as CreateTodoUseCaseMod from '../usecases/create-todo.usecase';
+import { makeTestTodoAction } from '@/core/__tests__/utilst/make-helpers-test-todo-action';
 import { createTodoAction } from './create-todo.action';
 
-vi.mock('next/cache', () => {
-  return {
-    revalidatePath: vi.fn(),
-  };
-});
-
-function makeMoks() {
-  const successResult = {
-    success: true,
-    todo: { id: 'id', description: 'test', createdAt: 'createdAt' },
-  } as ValidTodo;
-
-  const errorsResult = {
-    success: false,
-    errors: ['error', 'any'],
-  } as InvalidTodo;
-
-  const createTodoUseCaseSpy = vi
-    .spyOn(CreateTodoUseCaseMod, 'CreateTodoUseCase')
-    .mockResolvedValue(successResult);
-
-  const revalidatePathSpy = vi.mocked(revalidatePath);
-
-  return { createTodoUseCaseSpy, revalidatePathSpy, successResult, errorsResult };
-}
-
-describe('createTodoAction (unit)', () => {
+describe('createTodoAction (Unit)', () => {
   const description = 'test description';
 
   test('calls createTodoUseCase', async () => {
-    const { createTodoUseCaseSpy } = makeMoks();
+    const { createTodoUseCaseSpy } = makeTestTodoAction();
     await createTodoAction(description);
     expect(createTodoUseCaseSpy).toHaveBeenCalledWith(description);
   });
   test('calls revalidatePath when creation succeeds', async () => {
-    const { revalidatePathSpy } = makeMoks();
+    const { revalidatePathSpy } = makeTestTodoAction();
     await createTodoAction(description);
     expect(revalidatePathSpy).toHaveBeenCalledWith('/');
   });
   test('returns success flag and created todo when creation succeeds', async () => {
-    const { successResult } = makeMoks();
+    const { successResult } = makeTestTodoAction();
     const result = await createTodoAction(description);
     expect(result).toStrictEqual(successResult);
   });
 
   test('does not call revalidatePath when creation fails', async () => {
-    const { revalidatePathSpy, createTodoUseCaseSpy, errorsResult } = makeMoks();
+    const { revalidatePathSpy, createTodoUseCaseSpy, errorsResult } = makeTestTodoAction();
 
     createTodoUseCaseSpy.mockResolvedValue(errorsResult);
     await createTodoAction(description);
@@ -57,7 +29,7 @@ describe('createTodoAction (unit)', () => {
   });
 
   test('returns error(s) when creation fails', async () => {
-    const { createTodoUseCaseSpy, errorsResult } = makeMoks();
+    const { createTodoUseCaseSpy, errorsResult } = makeTestTodoAction();
 
     createTodoUseCaseSpy.mockResolvedValue(errorsResult);
     const result = await createTodoAction(description);
