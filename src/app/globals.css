@@ -12,15 +12,26 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Manual theme overrides for Storybook (takes precedence over system) */
+[data-mode='light'] {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+[data-mode='dark'] {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+/* System preference fallback (only applies if no data-mode is set) */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-mode]) {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+/* for dark mode in Storybook global.css */
+@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
+
+@source "./app/**/*.{js,ts,jsx,tsx}";

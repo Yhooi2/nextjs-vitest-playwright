@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from "eslint-plugin-storybook";
+
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import { dirname } from 'path';
@@ -11,30 +14,26 @@ const compat = new FlatCompat({
   recommendedConfig: js.configs.recommended,
 });
 
-const eslintConfig = [
-  ...compat.extends(
-    'next/core-web-vitals',
-    'next/typescript',
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'prettier'
-  ),
-  {
-    files: ['**/*.{js,jsx,ts,tsx}'],
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
-    rules: {
-      'react/react-in-jsx-scope': 'off', // Next.js не требует импорт React
-      'react/prop-types': 'off', // TypeScript уже проверяет типы
+const eslintConfig = [...compat.extends(
+  'next/core-web-vitals',
+  'next/typescript',
+  'eslint:recommended',
+  'plugin:react/recommended',
+  'plugin:@typescript-eslint/recommended',
+  'prettier'
+), {
+  files: ['**/*.{js,jsx,ts,tsx}'],
+  settings: {
+    react: {
+      version: 'detect',
     },
   },
-  {
-    ignores: ['node_modules/**', '.next/**', 'out/**', 'build/**', 'next-env.d.ts'],
+  rules: {
+    'react/react-in-jsx-scope': 'off', // Next.js не требует импорт React
+    'react/prop-types': 'off', // TypeScript уже проверяет типы
   },
-];
+}, {
+  ignores: ['node_modules/**', '.next/**', 'out/**', 'build/**', 'next-env.d.ts'],
+}, ...storybook.configs["flat/recommended"]];
 
 export default eslintConfig;

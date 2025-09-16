@@ -20,8 +20,8 @@
 - [x] Creating the schema (SQL table) with Drizzle + migrations
 - [x] Configure Drizzle ORM with .env base for Vitest, Playwright and Next.js
 - [x] Interface, implementation and tests of the repository with real database
-- [ ] Usecase `createTodoUseCase` with integration tests in Vitest
-- [ ] Usecase `deleteTodoUseCase` with integration tests in Vitest
-- [ ] Server action of Next.js with Vitest tests for `create`
-- [ ] Server action of Next.js with Vitest tests for `delete`
+- [x] Usecase `createTodoUseCase` with integration tests in Vitest
+- [x] Usecase `deleteTodoUseCase` with integration tests in Vitest
+- [x] Server action of Next.js with Vitest tests for `create`
+- [x] Server action of Next.js with Vitest tests for `delete`
 - [ ] (EDIT) We'll see the next steps according to the lessons...
