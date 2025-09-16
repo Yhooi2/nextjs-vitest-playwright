@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import "tw-animate-css";
+@import 'tw-animate-css';
 
 @theme inline {
   --color-background: var(--background);
@@ -36,39 +36,16 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
   --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius));
+  --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* Manual theme overrides for Storybook (takes precedence over system) */
-[data-mode='light'] {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-[data-mode='dark'] {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-}
-
-/* System preference fallback (only applies if no data-mode is set) */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-mode]) {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-/* for dark mode in Storybook global.css */
-@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
-
-@source "./app/**/*.{js,ts,jsx,tsx}";
-
+/* Основные переменные для light (OKLCH) */
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.147 0.004 49.25);
+  --background: oklch(1 0 0); /* #ffffff */
+  --foreground: oklch(0.147 0.004 49.25); /* #171717 */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.147 0.004 49.25);
   --popover: oklch(1 0 0);
@@ -100,9 +77,16 @@
   --sidebar-ring: oklch(0.709 0.01 56.259);
 }
 
-.dark {
-  --background: oklch(0.147 0.004 49.25);
-  --foreground: oklch(0.985 0.001 106.423);
+/* Переопределения для Storybook (ручное переключение) */
+[data-mode='light'] {
+  --background: oklch(1 0 0); /* #ffffff */
+  --foreground: oklch(0.147 0.004 49.25); /* #171717 */
+  /* Добавьте все остальные переменные из :root, если нужно полное переопределение */
+}
+
+[data-mode='dark'] {
+  --background: oklch(0.147 0.004 49.25); /* #0a0a0a */
+  --foreground: oklch(0.985 0.001 106.423); /* #ededed */
   --card: oklch(0.216 0.006 56.043);
   --card-foreground: oklch(0.985 0.001 106.423);
   --popover: oklch(0.216 0.006 56.043);
@@ -134,11 +118,34 @@
   --sidebar-ring: oklch(0.553 0.013 58.071);
 }
 
+/* Fallback на системные настройки (если data-mode не установлен) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-mode]) {
+    --background: oklch(0.147 0.004 49.25);
+    --foreground: oklch(0.985 0.001 106.423);
+    /* Добавьте все dark переменные, как выше */
+  }
+}
+
+/* Кастомный вариант для dark в Tailwind v4 (работает с data-mode) */
+@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
+
+@source "./app/**/*.{js,ts,jsx,tsx}";
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans; /* Используем переменную шрифта */
+    margin: 0;
+    padding: 0;
+  }
+  #storybook-root {
+    /* Только для Storybook */
+    height: 100%;
+    padding: 0; /* Без !important */
+    margin: 0;
+    background: var(--background);
   }
 }

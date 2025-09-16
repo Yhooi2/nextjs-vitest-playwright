@@ -17,6 +17,9 @@
 # testing
 /coverage
 
+# storybook exemles
+stories/
+
 # next.js
 /.next/
 /out/

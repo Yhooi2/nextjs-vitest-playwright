@@ -1,6 +1,5 @@
 import { withThemeByDataAttribute } from '@storybook/addon-themes';
 import type { Preview } from '@storybook/nextjs-vite';
-import '../.storybook/storybook.css'; // css for storybook
 import '../src/app/globals.css'; // replace with the name of your tailwind css file
 
 /* snipped for brevity */
