@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { useState } from 'react';
+import { fn } from 'storybook/test';
 import { Button, Size, Variant } from '.';
 
 const sizeOptions: Size[] = ['default', 'sm', 'lg', 'icon'];
@@ -12,9 +14,10 @@ const variantOptions: Variant[] = [
 ];
 
 const meta = {
-  title: 'Disign Sistem/Button',
+  title: 'Disign Sistem/ui/Button',
   component: Button,
   parameters: { layout: 'centered' },
+  args: { onClick: fn() },
   argTypes: {
     size: {
       control: 'select',
@@ -33,8 +36,24 @@ type Story = StoryObj<typeof Button>;
 
 export const Default = {
   args: {
-    children: 'test text',
+    children: 'fix',
     size: 'sm',
     variant: 'default',
+  },
+} satisfies Story;
+
+export const onClick = {
+  args: {
+    children: 'fix',
+    size: 'sm',
+    variant: 'default',
+  },
+  render: (args) => {
+    const [click, setClick] = useState(0);
+    return (
+      <Button {...args} onClick={() => setClick((click: number) => click + 1)}>
+        {click}
+      </Button>
+    );
   },
 } satisfies Story;

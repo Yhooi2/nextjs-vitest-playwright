@@ -34,8 +34,12 @@ const buttonVariants = cva(
 type Variants = VariantProps<typeof buttonVariants>;
 export type Variant = Variants['variant'];
 export type Size = Variants['size'];
-type Props = React.ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants> & {
+
+type Props = {
+  variant?: Variant;
+  size?: Size;
+  onClick?: () => void;
+} & React.ComponentProps<'button'> & {
     asChild?: boolean;
   };
 
