@@ -31,7 +31,7 @@ const preview: Preview = {
       test: 'todo',
     },
     // Optional: Disable backgrounds since we're using themes
-    backgrounds: { disable: true },
+    backgrounds: { disabled: true },
     // If using Next.js App Router exclusively
     nextjs: {
       appDirectory: true,

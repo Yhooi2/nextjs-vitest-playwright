@@ -1,4 +1,4 @@
-import { makeTestTodoAction } from '@/core/__tests__/utilst/make-helpers-test-todo-action';
+import { makeTestTodoAction } from '@/core/__tests__/utils/make-helpers-test-todo-action';
 import { createTodoAction } from './create-todo.action';
 
 describe('createTodoAction (Unit)', () => {

@@ -1,7 +1,7 @@
 import {
   insertTestTodos,
   makeTodosRepository,
-} from '@/core/__tests__/utilst/make-helpers-test-todo-repository';
+} from '@/core/__tests__/utils/make-helpers-test-todo-repository';
 
 describe('DrizzleTodoRepository CRUD tests (integrations)', async () => {
   const { clearDb, repository, todos } = await makeTodosRepository();

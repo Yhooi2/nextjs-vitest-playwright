@@ -1,4 +1,4 @@
-import { makeTestTodoAction } from '@/core/__tests__/utilst/make-helpers-test-todo-action';
+import { makeTestTodoAction } from '@/core/__tests__/utils/make-helpers-test-todo-action';
 import { deleteTodoAction } from './delete-todo-action';
 
 describe('deleteTodoAction (Unit)', async () => {

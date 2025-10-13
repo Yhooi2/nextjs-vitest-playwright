@@ -1,4 +1,4 @@
-import { makeTodosRepository } from '@/core/__tests__/utilst/make-helpers-test-todo-repository';
+import { makeTodosRepository } from '@/core/__tests__/utils/make-helpers-test-todo-repository';
 import { InvalidTodo, ValidTodo } from '../schemas/todo.contract';
 import { CreateTodoUseCase } from './create-todo.usecase';
 
