@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { fn } from 'storybook/test';
 import { Button, Size, Variant } from '.';
+import { boolean } from 'drizzle-orm/gel-core';
 
 const sizeOptions: Size[] = ['default', 'sm', 'lg', 'icon'];
 const variantOptions: Variant[] = [
@@ -27,6 +28,7 @@ const meta = {
       control: 'select',
       options: variantOptions,
     },
+    disabled: { control: "boolean"},
   },
 } satisfies Meta<typeof Button>;
 
@@ -36,16 +38,16 @@ type Story = StoryObj<typeof Button>;
 
 export const Default = {
   args: {
-    children: 'fix',
-    size: 'sm',
+    children: 'Button',
+    size: 'default',
     variant: 'default',
   },
 } satisfies Story;
 
 export const onClick = {
   args: {
-    children: 'fix',
-    size: 'sm',
+    children: 'Click Me',
+    size: 'default',
     variant: 'default',
   },
   render: (args) => {

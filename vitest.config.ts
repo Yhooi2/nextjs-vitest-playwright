@@ -10,7 +10,7 @@ import { defineConfig } from 'vitest/config';
 // Я использую командную строку для этого (но оставил её здесь, если вам удобно)
 // import dotenv from 'dotenv';
 //  dotenv.config({ path: '.env.test' });
-import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
+// import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import { fileURLToPath } from 'node:url';
 const dirname =
   typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
