@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Bell, Pen, Plus, Star, ThumbsUp, Trash } from 'lucide-react';
-import { useState } from 'react';
+import { ComponentProps, useState } from 'react';
 import { fn } from 'storybook/test';
 import { Button, Size, Variant } from '.';
 
@@ -25,7 +25,7 @@ const iconMap = {
 type iconType = keyof typeof iconMap;
 const iconOptions = Object.keys(iconMap) as iconType[];
 
-type ButtonStoryProps = React.ComponentProps<typeof Button> & {
+type ButtonStoryProps = ComponentProps<typeof Button> & {
   icon?: iconType;
 };
 
@@ -60,10 +60,10 @@ const meta = {
 export default meta;
 
 type Story = StoryObj<ButtonStoryProps>;
-const ButtonIcon = ({ icon, children, ...args }: ButtonStoryProps) => (
-  <Button {...args}>
+const ButtonIcon = ({ icon, children, size, ...args }: ButtonStoryProps) => (
+  <Button {...args} size={size}>
     {icon !== 'none' && iconMap[icon as iconType]}
-    {children}
+    {(size !== 'icon' || !icon) && children}
   </Button>
 );
 
@@ -77,13 +77,13 @@ export const Playground = {
 
 export const Large = {
   render: ({ ...args }) => (
-    <div className="flex gap-1">
-      <ButtonIcon {...args}> Button </ButtonIcon>
+    <div className="grid-cols-4 grid w-full max-w-2xl gap-4">
+      <ButtonIcon {...args}>Button</ButtonIcon>
       <ButtonIcon icon="thumbsUp" {...args}>
         Lick{' '}
       </ButtonIcon>
       <ButtonIcon icon="star" {...args}>
-        Favorites{' '}
+        Favorit{' '}
       </ButtonIcon>
       <ButtonIcon variant="secondary" icon="plus" {...args}>
         Add{' '}
@@ -94,11 +94,12 @@ export const Large = {
       <ButtonIcon variant="destructive" icon="trash" {...args}>
         Delete{' '}
       </ButtonIcon>
-      <ButtonIcon variant="ghost" icon="bell" size="icon"></ButtonIcon>
+
       <ButtonIcon variant="link" {...args}>
         {' '}
         link
       </ButtonIcon>
+      <ButtonIcon variant="ghost" icon="bell" size="icon" {...args}></ButtonIcon>
     </div>
   ),
 } satisfies Story;
@@ -106,8 +107,8 @@ export const Large = {
 export const onClick = {
   args: {
     children: 'Click Me',
-    size: 'default',
-    variant: 'default',
+    size: 'icon',
+    variant: 'outline',
   },
   render: (args) => {
     const [click, setClick] = useState(0);
