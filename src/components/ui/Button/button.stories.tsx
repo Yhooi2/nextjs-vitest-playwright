@@ -38,21 +38,31 @@ const meta = {
     size: {
       control: 'select',
       options: sizeOptions,
+      description: 'Size of the button',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'default', detail: 'size for button' },
+      },
     },
     variant: {
       control: 'select',
       options: variantOptions,
+      description: 'Variant of the button',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'default', detail: 'variant for button' },
+      },
     },
     icon: {
       control: 'select',
       options: iconOptions,
-      description: 'lalala',
+      description: 'Icon to display in the button',
       table: {
         type: { summary: 'ReactNode' },
         defaultValue: { summary: 'none' },
       },
     },
-    disabled: { control: 'boolean' },
+    disabled: { control: 'boolean', description: 'Whether the button is disabled' },
   },
   tags: ['autodocs'],
 } satisfies Meta<ButtonStoryProps>;
