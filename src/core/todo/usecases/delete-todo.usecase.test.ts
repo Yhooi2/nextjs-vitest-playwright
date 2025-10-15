@@ -7,7 +7,7 @@ describe('DeleteTodoUseCase (integration)', async () => {
   afterAll(clearDb);
 
   test('returns an error when ID is invalid', async () => {
-    expect(await deleteTodoUseCase('')).toStrictEqual({ success: false, errors: 'Invalid ID' });
+    expect(await deleteTodoUseCase('')).toStrictEqual({ success: false, errors: ['Invalid ID'] });
   });
   test('returns success when ID is valid and deletes the todo', async () => {
     const { todos, insertTodoDb } = await makeTodosRepository();
