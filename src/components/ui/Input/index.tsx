@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { ComponentProps, useId } from 'react';
-import { Label } from '../label';
+import { Label } from './label';
 
 type Props = ComponentProps<'input'> & {
   errorMesage?: string;
