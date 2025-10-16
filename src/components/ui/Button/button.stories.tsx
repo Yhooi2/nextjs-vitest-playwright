@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Bell, Pen, Plus, Star, ThumbsUp, Trash } from 'lucide-react';
 import { ComponentProps, useState } from 'react';
 import { fn } from 'storybook/test';
-import { Button, Size, Variant } from '.';
+import { Button, Size, Variant } from './index';
 
 const sizeOptions: Size[] = ['default', 'sm', 'lg', 'icon'];
 const variantOptions: Variant[] = [

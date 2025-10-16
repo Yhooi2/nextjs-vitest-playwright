@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { Input } from '.';
+import { Input } from './index';
 
 const meta = {
   title: 'Disign Sistem/Input',
