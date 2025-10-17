@@ -18,7 +18,7 @@ export const Default: Story = {
   args: {
     action: fn(async (desc: string) => ({
       success: true,
-      todo: { id: 'id', description: 'desc', createdAt: 'data' },
+      todo: { id: 'id', description: desc, createdAt: 'data' },
     })) as CreateTodoAction,
   },
 };
@@ -27,7 +27,7 @@ export const WhithError: Story = {
   args: {
     action: fn(async (desc: string) => ({
       success: false,
-      errors: ['Error creating todo'],
+      errors: [`Error creating todo: ${desc}`],
     })) as CreateTodoAction,
   },
 };

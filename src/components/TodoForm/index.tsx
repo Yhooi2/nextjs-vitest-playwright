@@ -2,89 +2,61 @@
 
 import { CreateTodoAction } from '@/core/todo/actions/todo.action.types';
 import { sanitizeStr } from '@/utils/sanitize-str';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { CirclePlusIcon } from 'lucide-react';
 import { useActionState } from 'react';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Field } from './field';
 
 const formSchema = z.object({
-  description: z
-    .string()
-    .trim()
-    .min(1, { message: 'Task must not be empty!' })
-    .transform(sanitizeStr),
+  description: z.string().min(1, { message: 'Task must not be empty!' }).transform(sanitizeStr),
 });
-type TodoFormData = z.infer<typeof formSchema>;
-type FormState = { success: boolean; errors: string[]; error?: string };
+
+type FormState = { success: boolean; errors: string[]; data: { description: string } };
 
 export type TodoFormProps = {
   action: CreateTodoAction;
 };
 
 export function TodoForm({ action }: TodoFormProps) {
-  const form = useForm<TodoFormData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: { description: '' },
-    mode: 'onBlur',
-  });
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-  } = form;
-
   const [state, formAction, isPending] = useActionState(
     async (_: FormState, formData: FormData): Promise<FormState> => {
-      const rawDescription = formData.get('description') as string;
-      const parsed = formSchema.safeParse({ description: rawDescription });
+      const raw = formData.get('description') as string;
+      const parsed = formSchema.safeParse({ description: raw });
       if (!parsed.success) {
         return {
           success: false,
           errors: parsed.error.issues.map((err) => err.message),
+          data: { description: raw },
         };
       }
       const result = await action(parsed.data.description);
-      if (!result.success) return result as FormState;
-      reset();
-      return { success: true, errors: [] } as FormState;
+      if (!result.success) return { ...result, data: { description: raw } };
+      return { success: true, errors: [], data: { description: '' } } as FormState;
     },
-    { success: false, errors: [] } as FormState
+    { success: false, errors: [], data: { description: '' } } as FormState
   );
 
-  const isInvalid = !!errors.description || (!state.success && state.errors.length > 0);
-  const errorMessage = errors.description?.message || state.errors[0];
-  const isLoading = isPending || isSubmitting;
-
+  const isInvalid = !state.success && state.errors.length > 0;
   return (
-    <form
-      onSubmit={handleSubmit((data) => {
-        const fd = new FormData();
-        fd.append('description', data.description);
-        formAction(fd);
-      })}
-      className="flex flex-col flex-1 gap-6"
-    >
+    <form action={formAction} className="flex flex-col flex-1 gap-6">
       <Field data-invalid={isInvalid}>
         <Input
-          {...register('description')}
+          name="description"
           labelText="Task"
           placeholder="Input task"
-          disabled={isLoading}
+          disabled={isPending}
           aria-invalid={isInvalid}
-          errorMessage={errorMessage}
+          errorMessage={state?.errors[0]}
+          defaultValue={state.data.description}
         />
         {/* <FieldDescription>Enter a description for your new task.</FieldDescription> */}
         {/* {isInvalid && <FieldError>{state.errors[0]}</FieldError>} */}
       </Field>
-      <Button type="submit" disabled={isLoading}>
+      <Button type="submit" disabled={isPending}>
         <CirclePlusIcon />
-        <span>{isLoading ? 'Creating Task...' : 'Create Task'}</span>
+        <span>{isPending ? 'Creating Task...' : 'Create Task'}</span>
       </Button>
     </form>
   );
