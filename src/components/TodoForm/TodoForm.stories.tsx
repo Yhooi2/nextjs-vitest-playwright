@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    action: fn(async () => ({
+    action: fn(async (desc: string) => ({
       success: true,
       todo: { id: 'id', description: 'desc', createdAt: 'data' },
     })) as CreateTodoAction,
@@ -25,7 +25,7 @@ export const Default: Story = {
 
 export const WhithError: Story = {
   args: {
-    action: fn(async () => ({
+    action: fn(async (desc: string) => ({
       success: false,
       errors: ['Error creating todo'],
     })) as CreateTodoAction,

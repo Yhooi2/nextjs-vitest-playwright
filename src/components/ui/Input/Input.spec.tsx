@@ -87,7 +87,7 @@ describe('<InputText />', () => {
     });
 
     test('renders error message when `errorMessage` is passed', async () => {
-      const el = input({ errorMesage: 'Error occurred' });
+      const el = input({ errorMessage: 'Error occurred' });
       expect(el).toHaveAttribute('aria-invalid', 'true');
       const error = screen.getByRole('alert');
       const errorId = error.getAttribute('id');
@@ -124,7 +124,7 @@ describe('<InputText />', () => {
     });
 
     test('adds error class (red ring) when invalid', async () => {
-      const el = input({ errorMesage: 'Error occurred' });
+      const el = input({ errorMessage: 'Error occurred' });
       expect(el).toHaveAttribute('aria-invalid', 'true');
       expect(el).toHaveClass('aria-invalid:ring-destructive/20');
       expect(el).toHaveClass('aria-invalid:placeholder:text-destructive/60');
