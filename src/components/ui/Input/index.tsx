@@ -3,14 +3,14 @@ import { ComponentProps, useId } from 'react';
 import { Label } from './label';
 
 type Props = ComponentProps<'input'> & {
-  errorMesage?: string;
+  errorMessage?: string;
   labelText?: string;
 };
 
-function Input({ className, type = 'text', errorMesage = '', labelText = '', ...props }: Props) {
+function Input({ className, type = 'text', errorMessage = '', labelText = '', ...props }: Props) {
   const id = useId();
   const errorId = `${id}-error`;
-  const isInvalid = !!errorMesage;
+  const isInvalid = !!errorMessage;
   const areaLabel = labelText || props.placeholder;
   return (
     <div className="flex flex-col gap-2 flex-1">
@@ -32,7 +32,7 @@ function Input({ className, type = 'text', errorMesage = '', labelText = '', ...
       />
       {isInvalid && (
         <p id={errorId} className="text-sm text-destructive" role="alert">
-          {errorMesage}
+          {errorMessage}
         </p>
       )}
     </div>
