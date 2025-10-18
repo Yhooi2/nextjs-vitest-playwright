@@ -1,6 +1,6 @@
-import { type CreateTodoAction } from '@/core/todo/actions/todo.action.types';
+// TodoForm.stories.tsx
+import { todoActionStoryMock } from '@/core/__tests__/mocks/todo-action-story';
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { fn } from 'storybook/test';
 import { TodoForm } from '.';
 
 const meta = {
@@ -16,18 +16,14 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    action: fn(async (desc: string) => ({
-      success: true,
-      todo: { id: 'id', description: desc, createdAt: 'data' },
-    })) as CreateTodoAction,
+    action: todoActionStoryMock.create.success,
+    todos: [],
   },
 };
 
-export const WhithError: Story = {
+export const WithError: Story = {
   args: {
-    action: fn(async (desc: string) => ({
-      success: false,
-      errors: [`Error creating todo: ${desc}`],
-    })) as CreateTodoAction,
+    action: todoActionStoryMock.create.error,
+    todos: [],
   },
 };
