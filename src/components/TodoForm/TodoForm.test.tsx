@@ -2,23 +2,25 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TodoForm } from '.';
 
-const user = userEvent.setup();
-
 describe('TodoForm Component integration', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
   test('render all form component', () => {
     const { input, btn } = renderForm();
     expect(input).toBeInTheDocument();
     expect(btn).toBeInTheDocument();
   });
-  test('call the action whith the correct values', async () => {
+  test('call action whith the correct values', async () => {
     const { input, btn, action } = renderForm();
     await user.type(input, 'new task');
     await user.click(btn);
     expect(action).toHaveBeenCalledWith('new task');
   });
-  test('trim whitespace from description before submitting', async () => {
+  test('trim whitespace before submitting', async () => {
     const { input, btn, action } = renderForm();
-    await user.type(input, '   new task ');
+    await user.type(input, '   new task  ');
     await user.click(btn);
     expect(action).toHaveBeenCalledWith('new task');
   });
