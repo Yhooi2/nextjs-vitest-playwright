@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import { TodoList } from '.';
 
 const meta = {
-  title: 'Disign Sistem/TodoList',
+  title: 'Design System/TodoList',
   component: TodoList,
   parameters: {
     layout: 'centered',

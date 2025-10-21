@@ -3,7 +3,7 @@ import z from 'zod';
 import { TaskInput } from './index';
 
 const meta = {
-  title: 'Disign Sistem/InputText',
+  title: 'Design System/InputText',
   component: TaskInput,
   parameters: {
     layout: 'centered',

@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import { TodoForm } from '.';
 
 const meta = {
-  title: 'Disign Sistem/TodoForm',
+  title: 'Design System/TodoForm',
   component: TodoForm,
   parameters: {
     layout: 'centered',

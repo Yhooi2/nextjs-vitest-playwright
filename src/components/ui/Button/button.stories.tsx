@@ -30,7 +30,7 @@ type ButtonStoryProps = ComponentProps<typeof Button> & {
 };
 
 const meta = {
-  title: 'Disign Sistem/Button',
+  title: 'Design System/Button',
   component: Button,
   parameters: { layout: 'centered' },
   args: { onClick: fn() },

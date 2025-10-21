@@ -82,7 +82,7 @@ export function useTodoCreate({ action, todos, onSuccess }: UseTodoCreateProps) 
         };
       }
 
-      toast.success('Tast created', { description: parsedDescription });
+      toast.success('Task created', { description: parsedDescription });
       onSuccess?.(parsedDescription);
       formRef.current?.reset();
 

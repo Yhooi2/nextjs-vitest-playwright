@@ -103,7 +103,7 @@ describe('TodoForm Component integration', () => {
       await user.click(btn);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith('Tast created', {
+        expect(toast.success).toHaveBeenCalledWith('Task created', {
           description: 'new task',
         });
       });
