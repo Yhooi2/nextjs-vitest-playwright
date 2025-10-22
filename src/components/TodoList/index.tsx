@@ -33,13 +33,17 @@ function TodoListItems({ todos, headingId, handleTodoDelete }: TodoListItemsProp
   const hasTodos = todos.length > 0;
   if (!hasTodos) {
     return (
-      <div className="text-center text-muted-foreground py-12">
+      <div role="status" aria-live="polite" className="text-center text-muted-foreground py-12">
         <p>No tasks found</p>
       </div>
     );
   }
   return (
-    <ItemGroup aria-labelledby={headingId} className="flex flex-col min-w-xs max-w-sm gap-4">
+    <ItemGroup
+      aria-labelledby={headingId}
+      area-label="Todo list"
+      className="flex flex-col min-w-xs max-w-sm gap-4"
+    >
       {todos.map((todo) => (
         //TODO variants for storybook
         <Item variant="muted" key={todo.id}>

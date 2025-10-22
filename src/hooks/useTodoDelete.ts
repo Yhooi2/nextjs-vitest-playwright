@@ -28,7 +28,7 @@ export function useTodoDelete({ action, todos }: TodoListProps) {
     };
   }, []);
   function cancelDeletion(todoId: string) {
-    // ?
+    console.log('click Undo');
     const pending = pendingDeletions.current.get(todoId);
     if (!pending) return;
     clearTimeout(pending.timeoutId);
@@ -47,11 +47,14 @@ export function useTodoDelete({ action, todos }: TodoListProps) {
   }
 
   async function executeDeletion(todoId: string, todo: Todo) {
+    console.log('action start');
     const cleanId = sanitizeStr(todoId);
     if (!cleanId) return;
+    console.log('id for action don`t empty');
     try {
       const result = await action(cleanId);
       if (!result.success) {
+        console.log('action failed');
         updateOptimisticTodos({ type: 'add', todo });
 
         toast.error('Failed to delete task', {
@@ -59,7 +62,9 @@ export function useTodoDelete({ action, todos }: TodoListProps) {
         });
         return;
       }
+      console.log('action success');
     } catch (error) {
+      console.log('action failed Unknown error');
       updateOptimisticTodos({ type: 'add', todo });
       toast.error('Failed to delete task', {
         description: error instanceof Error ? error.message : 'Unknown error',
@@ -71,12 +76,14 @@ export function useTodoDelete({ action, todos }: TodoListProps) {
 
   async function handleTodoDelete(todo: Todo) {
     const cleanId = sanitizeStr(todo.id);
+    console.log('click Close');
     if (!cleanId) return;
+    console.log('id is right, start deleting...');
     updateOptimisticTodos({ type: 'delete', id: cleanId });
     const timeoutId = setTimeout(() => {
       executeDeletion(cleanId, todo);
     }, DELETE_DELAY);
-
+    console.log('task deleted!');
     const toastId = toast.success('Task deleted', {
       description: todo.description,
       duration: DELETE_DELAY,
