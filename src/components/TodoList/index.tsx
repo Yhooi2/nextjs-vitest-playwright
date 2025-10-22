@@ -41,7 +41,7 @@ function TodoListItems({ todos, headingId, handleTodoDelete }: TodoListItemsProp
   return (
     <ItemGroup
       aria-labelledby={headingId}
-      area-label="Todo list"
+      aria-label="Todo list"
       className="flex flex-col min-w-xs max-w-sm gap-4"
     >
       {todos.map((todo) => (

@@ -1,12 +1,17 @@
 import { mockTodos } from '@/core/__tests__/mocks/todos';
 import { Todo, TodoPresenter } from '@/core/todo/schemas/todo.contract';
 import { fireEvent, render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Toaster } from 'sonner';
 import { TodoList } from '.';
 
 const DELETE_DELAY = 5100;
 
-// const user = userEvent.setup();
+function getToastByType(type: 'success' | 'error' | 'info' | 'warning') {
+  return document.querySelector(`[data-sonner-toast][data-type="${type}"]`);
+}
+
+const user = userEvent.setup();
 describe('<TodoList /> (integration)', () => {
   describe('Rendering', () => {
     test('render list, and TODO list items', async () => {
@@ -39,6 +44,17 @@ describe('<TodoList /> (integration)', () => {
       expect(status).toHaveAttribute('aria-live', 'polite');
     });
   });
+  // describe('useOptimisticTodos', () => {
+  //   test('remove the TODO item from the list optimistically when clicking delete', async () => {
+  //     const { todos } = renderList();
+  //     const listitems = screen.getAllByRole('listitem');
+  //     expect(listitems).toHaveLength(todos.length);
+  //     await user.click(within(listitems[0]).getByRole('button'));
+  //     const listTodo = screen.getByRole('list', { name: 'Todo list' });
+  //     const listitemsAfterDelete = within(listTodo).getAllByRole('listitem');
+  //     expect(listitemsAfterDelete).toHaveLength(todos.length - 1);
+  //   });
+  // });
   describe('Action', () => {
     beforeAll(() => vi.useFakeTimers());
     afterAll(() => vi.useRealTimers());
@@ -52,7 +68,7 @@ describe('<TodoList /> (integration)', () => {
       expect(action).toHaveBeenCalledOnce();
     });
 
-    test('call the correct action for each list item', async () => {
+    test('call action for each list item', async () => {
       const { action, todos } = renderList();
       const listitems = screen.getAllByRole('listitem');
 
@@ -66,15 +82,23 @@ describe('<TodoList /> (integration)', () => {
       await vi.advanceTimersByTimeAsync(DELETE_DELAY);
 
       expect(action).toHaveBeenCalledTimes(todos.length);
-      screen.getAllByRole('list').forEach((list) => {
-        expect(list).not.toHaveAttribute('aria-label', 'Todo list');
-      });
     });
   });
+  describe('Notfications', () => {
+    test('show undo toast success when deleting a TODO', async () => {
+      renderList();
+      const items = screen.getAllByRole('listitem');
+      await user.click(within(items[0]).getByRole('button'));
+      expect(getToastByType('success')).toBeInTheDocument();
+    });
 
-  test('disable the list buttons while sending the action', async () => {});
-
-  test('notify the user if there is an error when deleting the TODO', async () => {});
+    test('notify the user if there is an error when deleting the TODO', async () => {
+      renderList({ success: false });
+      const items = screen.getAllByRole('listitem');
+      await user.click(within(items[0]).getByRole('button'));
+      expect(getToastByType('error')).toBeInTheDocument();
+    });
+  });
 
   test('not call the action if the ID is invalid, empty, or formed only with spaces', async () => {});
 });

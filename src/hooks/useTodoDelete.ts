@@ -5,59 +5,66 @@ import { useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { useOptimisticTodos } from './useOptimisticTodos';
 
-const DELETE_DELAY = 5000;
 const CANCEL_TOAST = 500;
+const DELETE_DELAY = 5000;
 
 type PendingDeletion = {
   todo: Todo;
-  timeoutId: NodeJS.Timeout;
   toastId: string | number;
+  restorable: boolean;
 };
 
 export function useTodoDelete({ action, todos }: TodoListProps) {
   const pendingDeletions = useRef<Map<string, PendingDeletion>>(new Map());
   const [optimisticTodos, updateOptimisticTodos] = useOptimisticTodos(todos);
 
+  // Clear after close
   useEffect(() => {
     const deletionsMap = pendingDeletions.current;
-    return () => {
-      deletionsMap.forEach(({ timeoutId }) => {
-        clearTimeout(timeoutId);
-      });
-      deletionsMap.clear();
-    };
+    return () => deletionsMap.clear();
   }, []);
+
   function cancelDeletion(todoId: string) {
     console.log('click Undo');
     const pending = pendingDeletions.current.get(todoId);
     if (!pending) return;
-    clearTimeout(pending.timeoutId);
+    pending.restorable = false;
+
     pendingDeletions.current.delete(todoId);
     updateOptimisticTodos({ type: 'add', todo: pending.todo });
-    toast.dismiss(pending.toastId);
     toast.info('Action cancelled', {
       id: pending.toastId,
       description: 'Task restored successfully',
       duration: CANCEL_TOAST,
-      action: {
-        label: 'Close',
-        onClick: () => toast.dismiss(pending.toastId),
-      },
     });
   }
 
-  async function executeDeletion(todoId: string, todo: Todo) {
-    console.log('action start');
-    const cleanId = sanitizeStr(todoId);
+  async function handleTodoDelete(todo: Todo) {
+    const cleanId = sanitizeStr(todo.id);
+    console.log('click Close');
     if (!cleanId) return;
-    console.log('id for action don`t empty');
+    console.log('id is right, start deleting...');
+    updateOptimisticTodos({ type: 'delete', id: cleanId });
+    const toastId = toast.success('Task deleted', {
+      description: todo.description,
+      duration: DELETE_DELAY,
+      action: {
+        label: 'Undo',
+        onClick: () => cancelDeletion(cleanId),
+      },
+    });
+    pendingDeletions.current.set(cleanId, { todo, toastId, restorable: true });
+    console.log('task deleting');
     try {
       const result = await action(cleanId);
       if (!result.success) {
         console.log('action failed');
-        updateOptimisticTodos({ type: 'add', todo });
+
+        const pending = pendingDeletions.current.get(cleanId);
+        if (pending?.restorable) updateOptimisticTodos({ type: 'add', todo });
 
         toast.error('Failed to delete task', {
+          id: toastId,
           description: result.errors[0],
         });
         return;
@@ -67,32 +74,14 @@ export function useTodoDelete({ action, todos }: TodoListProps) {
       console.log('action failed Unknown error');
       updateOptimisticTodos({ type: 'add', todo });
       toast.error('Failed to delete task', {
+        id: toastId,
         description: error instanceof Error ? error.message : 'Unknown error',
       });
     } finally {
-      pendingDeletions.current.delete(todoId);
+      setTimeout(() => {
+        pendingDeletions.current.delete(cleanId);
+      }, DELETE_DELAY);
     }
-  }
-
-  async function handleTodoDelete(todo: Todo) {
-    const cleanId = sanitizeStr(todo.id);
-    console.log('click Close');
-    if (!cleanId) return;
-    console.log('id is right, start deleting...');
-    updateOptimisticTodos({ type: 'delete', id: cleanId });
-    const timeoutId = setTimeout(() => {
-      executeDeletion(cleanId, todo);
-    }, DELETE_DELAY);
-    console.log('task deleted!');
-    const toastId = toast.success('Task deleted', {
-      description: todo.description,
-      duration: DELETE_DELAY,
-      action: {
-        label: 'Undo',
-        onClick: () => cancelDeletion(cleanId),
-      },
-    });
-    pendingDeletions.current.set(cleanId, { todo, timeoutId, toastId });
   }
   return { optimisticTodos, handleTodoDelete };
 }
