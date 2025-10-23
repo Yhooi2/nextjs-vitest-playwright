@@ -9,6 +9,7 @@ package-lock.json
 yarn.lock
 .env
 .env.local
+.storybook/preview.ts
 
 # Don't format images and icons
 public/**/*.svg

@@ -56,8 +56,8 @@ describe('<TodoList /> (integration)', () => {
   //   });
   // });
   describe('Action', () => {
-    beforeAll(() => vi.useFakeTimers());
-    afterAll(() => vi.useRealTimers());
+    beforeEach(() => vi.useFakeTimers());
+    afterEach(() => vi.useRealTimers());
 
     test('call action after clicking delete', async () => {
       const { action } = renderList();
@@ -123,7 +123,8 @@ function renderList({ delay = 0, success = true, todos = mockTodos }: RenderList
 
   const renderResult = render(
     <>
-      <TodoList action={action} todos={todos} /> <Toaster />
+      <TodoList action={action} todos={todos} />
+      <Toaster />
     </>
   );
   return { action, renderResult, todos };

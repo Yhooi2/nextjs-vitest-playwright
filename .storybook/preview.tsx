@@ -1,8 +1,14 @@
 import { withThemeByDataAttribute } from '@storybook/addon-themes';
-import type { Preview } from '@storybook/nextjs-vite';
+import type { Decorator, Preview } from '@storybook/nextjs-vite';
+import { Toaster } from 'sonner';
 import '../src/app/globals.css'; // replace with the name of your tailwind css file
 
-/* snipped for brevity */
+const withToaster: Decorator = (Story) => (
+  <>
+    <Story />
+    <Toaster />
+  </>
+);
 
 export const decorators = [
   withThemeByDataAttribute({
@@ -13,6 +19,7 @@ export const decorators = [
     defaultTheme: 'light',
     attributeName: 'data-mode',
   }),
+  withToaster,
 ];
 
 const preview: Preview = {

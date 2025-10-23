@@ -64,6 +64,7 @@ docs/
 1. [`ui/tailwindcss.md`](./dependencies/ui/tailwindcss.md) - Стилизация
 2. [`ui/radix-ui.md`](./dependencies/ui/radix-ui.md) - Headless components
 3. [`ui/class-variance-authority.md`](./dependencies/ui/class-variance-authority.md) - Варианты
+4. **[`STORYBOOK_TASKINPUT_LESSON.md`](./STORYBOOK_TASKINPUT_LESSON.md)** - 📚 **Полный учебник по Storybook 9 best practices**
 
 ## Дополнительные ресурсы
 

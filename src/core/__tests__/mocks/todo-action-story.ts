@@ -1,5 +1,5 @@
 import { CreateTodoAction, DeleteTodoAction } from '@/core/todo/actions/todo.action.types';
-import { fn } from 'storybook/internal/test';
+import { fn } from 'storybook/test';
 
 export const todoActionStoryMock = {
   create: {
