@@ -34,6 +34,7 @@ export class DrizzleTodoRepository implements TodoRepository {
         errors: ['Todo with this ID already exists'],
       };
     }
+
     const foundTodoByDescription = await this.findByDescription(todo.description);
     if (foundTodoByDescription) {
       return {
@@ -44,6 +45,21 @@ export class DrizzleTodoRepository implements TodoRepository {
 
     await this.db.insert(todoTable).values(todo);
     return { success: true, todo };
+  }
+  async update(id: string, todo: Partial<Todo>): Promise<TodoPresenter> {
+    const foundTodo = await this.findById(id);
+    if (!foundTodo) {
+      return {
+        success: false,
+        errors: ['Todo with this ID does not exist'],
+      };
+    }
+    await this.db.update(todoTable).set(todo).where(eq(todoTable.id, id));
+    const updateTodo = await this.findById(id);
+    return {
+      success: true,
+      todo: updateTodo!,
+    };
   }
 
   async delete(id: string): Promise<TodoPresenter> {

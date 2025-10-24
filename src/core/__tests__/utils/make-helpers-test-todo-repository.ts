@@ -6,7 +6,7 @@ export const makeTestTodos = () => {
   const newTodo = new Array<Todo>();
   for (let i = 0; i < 5; ++i) {
     const si = i.toString();
-    newTodo.push({ id: si, description: 'descreption' + si, createdAt: si });
+    newTodo.push({ id: si, description: 'descreption' + si, createdAt: si, deletedAt: null });
   }
   return newTodo;
 };
@@ -17,9 +17,10 @@ export async function makeTodosRepository() {
   const todos = makeTestTodos();
 
   const insertTodoDb = () => db.insert(todoTable);
+  const updateTodoDb = () => db.update(todoTable);
   const clearDb = () => db.delete(todoTable);
 
-  return { repository, insertTodoDb, clearDb, todos };
+  return { repository, insertTodoDb, updateTodoDb, clearDb, todos };
 }
 
 export const insertTestTodos = async () => {

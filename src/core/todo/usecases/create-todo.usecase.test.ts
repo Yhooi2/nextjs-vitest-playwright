@@ -1,5 +1,5 @@
 import { makeTodosRepository } from '@/core/__tests__/utils/make-helpers-test-todo-repository';
-import { InvalidTodo, ValidTodo } from '../schemas/todo.contract';
+import { InvalidTodo, Todo, ValidTodo } from '../schemas/todo.contract';
 import { createTodoUseCase } from './create-todo.usecase';
 
 describe('CreateTodoUseCase(integration)', async () => {
@@ -20,7 +20,8 @@ describe('CreateTodoUseCase(integration)', async () => {
         id: expect.any(String),
         description,
         createdAt: expect.any(String),
-      });
+        deletedAt: null,
+      } satisfies Todo);
     });
 
     test('should return error for duplicate description', async () => {

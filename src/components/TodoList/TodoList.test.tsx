@@ -1,11 +1,9 @@
 import { mockTodos } from '@/core/__tests__/mocks/todos';
 import { Todo, TodoPresenter } from '@/core/todo/schemas/todo.contract';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Toaster } from 'sonner';
 import { TodoList } from '.';
-
-const DELETE_DELAY = 5100;
 
 function getToastByType(type: 'success' | 'error' | 'info' | 'warning') {
   return document.querySelector(`[data-sonner-toast][data-type="${type}"]`);
@@ -44,27 +42,12 @@ describe('<TodoList /> (integration)', () => {
       expect(status).toHaveAttribute('aria-live', 'polite');
     });
   });
-  // describe('useOptimisticTodos', () => {
-  //   test('remove the TODO item from the list optimistically when clicking delete', async () => {
-  //     const { todos } = renderList();
-  //     const listitems = screen.getAllByRole('listitem');
-  //     expect(listitems).toHaveLength(todos.length);
-  //     await user.click(within(listitems[0]).getByRole('button'));
-  //     const listTodo = screen.getByRole('list', { name: 'Todo list' });
-  //     const listitemsAfterDelete = within(listTodo).getAllByRole('listitem');
-  //     expect(listitemsAfterDelete).toHaveLength(todos.length - 1);
-  //   });
-  // });
-  describe('Action', () => {
-    beforeEach(() => vi.useFakeTimers());
-    afterEach(() => vi.useRealTimers());
 
+  describe('Action', () => {
     test('call action after clicking delete', async () => {
       const { action } = renderList();
       const items = screen.getAllByRole('listitem');
-      expect(items[0]).toBeInTheDocument();
-      fireEvent.click(within(items[0]).getByRole('button'));
-      await vi.advanceTimersByTimeAsync(DELETE_DELAY);
+      await user.click(within(items[0]).getByRole('button'));
       expect(action).toHaveBeenCalledOnce();
     });
 
@@ -72,15 +55,9 @@ describe('<TodoList /> (integration)', () => {
       const { action, todos } = renderList();
       const listitems = screen.getAllByRole('listitem');
 
-      // listitems.forEach(async (item) => {
-      //   await user.click(within(item).getByRole('button'));
-      // });
-
       for (const item of listitems) {
-        fireEvent.click(within(item).getByRole('button'));
+        await user.click(within(item).getByRole('button'));
       }
-      await vi.advanceTimersByTimeAsync(DELETE_DELAY);
-
       expect(action).toHaveBeenCalledTimes(todos.length);
     });
   });
@@ -99,8 +76,6 @@ describe('<TodoList /> (integration)', () => {
       expect(getToastByType('error')).toBeInTheDocument();
     });
   });
-
-  test('not call the action if the ID is invalid, empty, or formed only with spaces', async () => {});
 });
 
 type RenderListProps = {

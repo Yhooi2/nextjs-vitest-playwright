@@ -1,0 +1,1 @@
+ALTER TABLE `todo` ADD `deleted_at` text;

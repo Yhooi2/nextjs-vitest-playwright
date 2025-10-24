@@ -10,6 +10,7 @@ describe('makeNewTodo (unit)', () => {
       id: expect.any(String),
       description,
       createdAt: expect.any(String),
+      deletedAt: null,
     };
 
     // Act

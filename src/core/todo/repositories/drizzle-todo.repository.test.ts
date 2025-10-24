@@ -54,15 +54,29 @@ describe('DrizzleTodoRepository CRUD tests (integrations)', async () => {
     });
   });
 
-  describe('delete test', async () => {
-    test('When the only todo is deleted, return success and findAll returns an empty array', async () => {
+  describe(' delete test', async () => {
+    test('when one todo is soft delete, func and findAll returns it whith deletedAt date', async () => {
+      await repository.create(todos[0]);
+      const dateDeleted = new Date().toISOString();
+      const res = await repository.update(todos[0].id, { deletedAt: dateDeleted });
+      successResult.todo.deletedAt = dateDeleted;
+      expect(res).toStrictEqual(successResult);
+      expect(await repository.findAll()).toHaveLength(1);
+    });
+
+    test('when the only todo is hard deleted, return success and findAll returns an empty array', async () => {
       await repository.create(todos[0]);
       const res = await repository.delete(todos[0].id);
       expect(res).toStrictEqual(successResult);
       expect(await repository.findAll()).toHaveLength(0);
     });
 
-    test('Deleting a todo with a non-existent ID returns an error', async () => {
+    test('soft deleting a todo with a non-existent ID returns an error', async () => {
+      const res = await repository.update('any id', { deletedAt: 'any time' });
+      expect(res).toStrictEqual({ success: false, errors: ['Todo with this ID does not exist'] });
+    });
+
+    test('hard deleting a todo with a non-existent ID returns an error', async () => {
       const res = await repository.delete('any id');
       expect(res).toStrictEqual({ success: false, errors: ['Todo with this ID does not exist'] });
     });

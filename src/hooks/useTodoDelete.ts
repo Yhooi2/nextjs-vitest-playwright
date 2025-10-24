@@ -45,6 +45,35 @@ export function useTodoDelete({ action, todos }: TodoListProps) {
     });
   }
 
+  async function executeDeletion(cleanId: string, todo: Todo, toastId: string | number) {
+    console.log('task deleting');
+    const pending = pendingDeletions.current.get(cleanId);
+    const restoreTodo = (errorMessage: string) => {
+      if (pending?.restorable) {
+        clearTimeout(pending.timerId);
+        updateOptimisticTodos({ type: 'add', todo });
+      }
+      pendingDeletions.current.delete(cleanId);
+      toast.error('Failed to delete task', {
+        id: toastId,
+        description: errorMessage,
+      });
+    };
+    try {
+      const result = await action(cleanId);
+      if (!result.success) {
+        console.log('action failed');
+        restoreTodo(result.errors?.[0] || 'Unknown error');
+        return;
+      }
+      console.log('action success');
+    } catch (error) {
+      console.log('action failed Unknown error');
+      if (!pending?.restorable) return;
+      restoreTodo(error instanceof Error ? error.message : 'Unknown error');
+    }
+  }
+
   async function handleTodoDelete(todo: Todo) {
     const cleanId = sanitizeStr(todo.id);
     console.log('click Close');
@@ -52,7 +81,10 @@ export function useTodoDelete({ action, todos }: TodoListProps) {
     console.log('id is right, start deleting...');
     if (pendingDeletions.current.has(cleanId)) return;
 
+    // Optimistic update
     updateOptimisticTodos({ type: 'delete', id: cleanId });
+
+    // Show toast with undo action
     const toastId = toast.success('Task deleted', {
       description: todo.description,
       duration: DELETE_DELAY,
@@ -61,43 +93,17 @@ export function useTodoDelete({ action, todos }: TodoListProps) {
         onClick: () => cancelDeletion(cleanId),
       },
     });
+
+    // Schedule cleanup
     const timerId = setTimeout(() => {
       pendingDeletions.current.delete(cleanId);
     }, DELETE_DELAY);
 
     pendingDeletions.current.set(cleanId, { todo, toastId, restorable: true, timerId });
-    console.log('task deleting');
-    try {
-      const result = await action(cleanId);
-      if (!result.success) {
-        console.log('action failed');
 
-        const pending = pendingDeletions.current.get(cleanId);
-        if (pending?.restorable) {
-          clearTimeout(pending.timerId);
-          updateOptimisticTodos({ type: 'add', todo });
-        }
-        pendingDeletions.current.delete(cleanId);
-        toast.error('Failed to delete task', {
-          id: toastId,
-          description: result.errors?.[0] || 'Unknown error',
-        });
-        return;
-      }
-      console.log('action success');
-    } catch (error) {
-      console.log('action failed Unknown error');
-      const pending = pendingDeletions.current.get(cleanId);
-
-      if (!pending?.restorable) return;
-      clearTimeout(pending.timerId);
-      pendingDeletions.current.delete(cleanId);
-      updateOptimisticTodos({ type: 'add', todo });
-      toast.error('Failed to delete task', {
-        id: toastId,
-        description: error instanceof Error ? error.message : 'Unknown error',
-      });
-    }
+    // Execute actual deletion
+    await executeDeletion(cleanId, todo, toastId);
   }
+
   return { optimisticTodos, handleTodoDelete };
 }

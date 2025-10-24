@@ -1,0 +1,27 @@
+function useTodoDelete({ action, todos }) {
+  // ✨ Event handler - всегда видит свежие props, но не reactive
+  const onDelete = useEffectEvent(async (id: string, todo: Todo) => {
+    const pending = pendingDeletions.current.get(id);
+
+    // Проверяем перед delete - restorable может измениться!
+    if (!pending?.restorable) {
+      console.log('Deletion cancelled, skipping');
+      return; // 🎯 Не удаляем, если был Undo
+    }
+
+    const result = await action(id);
+    // ... handle result
+  });
+
+  function handleTodoDelete(todo: Todo) {
+    // Schedule deletion
+    const timerId = setTimeout(() => {
+      onDelete(todo.id, todo); // ✅ Всегда видит актуальный restorable
+    }, 5000);
+
+    pendingDeletions.current.set(todo.id, {
+      timerId,
+      restorable: true,
+    });
+  }
+}

@@ -5,5 +5,6 @@ export function makeNewTodo(description: string): Todo {
     id: crypto.randomUUID(),
     description,
     createdAt: new Date().toISOString(),
+    deletedAt: null,
   };
 }
