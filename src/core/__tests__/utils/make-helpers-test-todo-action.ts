@@ -1,6 +1,7 @@
 import { InvalidTodo, ValidTodo } from '@/core/todo/schemas/todo.contract';
 import * as createTodoUseCaseMod from '@/core/todo/usecases/create-todo.usecase';
 import * as deleteTodoUseCaseMod from '@/core/todo/usecases/delete-todo.usecase';
+import * as updateTodoUseCaseMod from '@/core/todo/usecases/update-todo.usecase';
 import { revalidatePath } from 'next/cache';
 
 vi.mock('next/cache', () => {
@@ -12,7 +13,7 @@ vi.mock('next/cache', () => {
 export function makeTestTodoAction() {
   const successResult = {
     success: true,
-    todo: { id: 'id', description: 'test', createdAt: 'createdAt' },
+    todo: { id: 'id', description: 'test', createdAt: 'createdAt', deletedAt: 'test' },
   } as ValidTodo;
 
   const errorsResult = {
@@ -24,6 +25,10 @@ export function makeTestTodoAction() {
     .spyOn(createTodoUseCaseMod, 'createTodoUseCase')
     .mockResolvedValue(successResult);
 
+  const updateTodoUseCaseSpy = vi
+    .spyOn(updateTodoUseCaseMod, 'updateTodoUseCase')
+    .mockResolvedValue(successResult);
+
   const deleteTodoUseCaseSpy = vi
     .spyOn(deleteTodoUseCaseMod, 'deleteTodoUseCase')
     .mockResolvedValue(successResult);
@@ -32,6 +37,7 @@ export function makeTestTodoAction() {
 
   return {
     createTodoUseCaseSpy,
+    updateTodoUseCaseSpy,
     deleteTodoUseCaseSpy,
     revalidatePathSpy,
     successResult,

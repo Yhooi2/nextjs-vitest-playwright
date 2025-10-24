@@ -13,7 +13,7 @@ describe('deleteTodoAction (Unit)', async () => {
     await deleteTodoAction(fakeId);
     expect(revalidatePathSpy).toHaveBeenCalledExactlyOnceWith('/');
   });
-  test('return success and deleted todo when success delete', async () => {
+  test('return success', async () => {
     const { successResult } = makeTestTodoAction();
     const deleteResult = await deleteTodoAction(fakeId);
     expect(deleteResult).toStrictEqual(successResult);
