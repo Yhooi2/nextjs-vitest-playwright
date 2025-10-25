@@ -12,3 +12,12 @@ export async function updateTodoAction(
   if (updateResult.success) revalidatePath('/');
   return updateResult;
 }
+
+// Wrappers
+export async function deleteSelfTodoAction(id: string) {
+  const deletedAt = new Date().toISOString();
+  return updateTodoAction(id, { deletedAt });
+}
+export async function restoreTodoAction(id: string) {
+  return updateTodoAction(id, { deletedAt: null });
+}
