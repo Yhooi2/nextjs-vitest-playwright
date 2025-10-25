@@ -1,5 +1,6 @@
 import {
   insertTestTodos,
+  insertTestTodosDeleted,
   makeTodosRepository,
 } from '@/core/__tests__/utils/make-test-todo-repository';
 
@@ -15,7 +16,6 @@ describe('DrizzleTodoRepository CRUD tests (integrations)', async () => {
   describe('findAll tests', () => {
     test('When no todos exist, findAll returns an empty array', async () => {
       const result = await repository.findAll();
-      expect(result).toStrictEqual([]);
       expect(result).toHaveLength(0);
     });
 
@@ -24,6 +24,43 @@ describe('DrizzleTodoRepository CRUD tests (integrations)', async () => {
       expect(await repository.findAll()).toStrictEqual(
         todos.toSorted((a, b) => Number(b.createdAt) - Number(a.createdAt))
       );
+    });
+  });
+  describe('findAllActive tests', () => {
+    test('When no todos exist, findAllActive returns an empty array', async () => {
+      const result = await repository.findAllActive();
+      expect(result).toHaveLength(0);
+    });
+
+    test('findAllActive returns todos in descending order', async () => {
+      await insertTestTodos();
+      expect(await repository.findAllActive()).toStrictEqual(
+        todos.toSorted((a, b) => Number(b.createdAt) - Number(a.createdAt))
+      );
+    });
+    test('findAllActive  returns todos only active', async () => {
+      await insertTestTodosDeleted();
+      const result = await repository.findAllActive();
+      expect(result).toHaveLength(0);
+    });
+  });
+  describe('findAllDeleted tests', () => {
+    test('When no todos exist, findAllDeleted returns an empty array', async () => {
+      const result = await repository.findAllDeleted();
+      expect(result).toHaveLength(0);
+    });
+
+    test('findAllDeleted returns todos in descending order deletedAt', async () => {
+      const todosDeleted = await insertTestTodosDeleted();
+      expect(await repository.findAllDeleted()).toStrictEqual(
+        todosDeleted.toSorted((a, b) => Number(b.deletedAt) - Number(a.deletedAt))
+      );
+    });
+    test('findAllDeleted returns todos only active', async () => {
+      await insertTestTodos();
+
+      const result = await repository.findAllDeleted();
+      expect(result).toHaveLength(0);
     });
   });
   describe('create tests', () => {
@@ -54,7 +91,7 @@ describe('DrizzleTodoRepository CRUD tests (integrations)', async () => {
     });
   });
 
-  describe(' delete test', async () => {
+  describe(' delete test', () => {
     test('when one todo is soft delete, func and findAll returns it whith deletedAt date', async () => {
       await repository.create(todos[0]);
       const dateDeleted = new Date().toISOString();

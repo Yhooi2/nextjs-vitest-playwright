@@ -24,7 +24,7 @@ export class DrizzleTodoRepository implements TodoRepository {
   async findAllDeleted(): Promise<Todo[]> {
     return this.db.query.todo.findMany({
       where: (todo, { isNotNull }) => isNotNull(todo.deletedAt),
-      orderBy: (todo, { desc }) => [desc(todo.deletedAt), desc(todo.deletedAt)],
+      orderBy: (todo, { desc }) => [desc(todo.deletedAt), desc(todo.description)],
     });
   }
   async findById(id: string): Promise<Todo | undefined> {
@@ -58,6 +58,7 @@ export class DrizzleTodoRepository implements TodoRepository {
     await this.db.insert(todoTable).values(todo);
     return { success: true, todo };
   }
+
   async update(id: string, todo: Partial<Todo>): Promise<TodoPresenter> {
     const foundTodo = await this.findById(id);
     if (!foundTodo) {
