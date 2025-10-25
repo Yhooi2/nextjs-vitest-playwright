@@ -6,11 +6,7 @@ export function makeUpdateValidatedTodo(updateTodo: Partial<Todo>): InvalidTodo 
   if (updateTodo.description !== undefined) {
     const clearDescription = sanitizeStr(updateTodo.description);
     const result = validateTodoDescription(clearDescription);
-    if (!result.success)
-      return {
-        success: false,
-        errors: result.errors,
-      };
+    if (!result.success) return result as InvalidTodo;
     updateTodo.description = clearDescription;
   }
 
