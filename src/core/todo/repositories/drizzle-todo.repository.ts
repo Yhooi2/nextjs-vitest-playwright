@@ -15,6 +15,18 @@ export class DrizzleTodoRepository implements TodoRepository {
       orderBy: (todo, { desc }) => [desc(todo.createdAt), desc(todo.description)],
     });
   }
+  async findAllActive(): Promise<Todo[]> {
+    return this.db.query.todo.findMany({
+      where: (todo, { isNull }) => isNull(todo.deletedAt),
+      orderBy: (todo, { desc }) => [desc(todo.createdAt), desc(todo.description)],
+    });
+  }
+  async findAllDeleted(): Promise<Todo[]> {
+    return this.db.query.todo.findMany({
+      where: (todo, { isNotNull }) => isNotNull(todo.deletedAt),
+      orderBy: (todo, { desc }) => [desc(todo.deletedAt), desc(todo.deletedAt)],
+    });
+  }
   async findById(id: string): Promise<Todo | undefined> {
     return this.db.query.todo.findFirst({
       where: (todo, { eq }) => eq(todo.id, id),
